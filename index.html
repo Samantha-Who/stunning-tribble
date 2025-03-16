@@ -32,12 +32,6 @@
     <div class="rubric-container">
         <h2>Weighted Quality Rubric</h2>
         
-        <label for="grammar">Grammar:</label>
-        <select id="grammar">
-            <option value="meets">Meets</option>
-            <option value="autofail">Autofail</option>
-        </select>
-        
         <h3>Content Quality</h3>
         <div class="grid-container">
             <div class="grid-item">
@@ -99,64 +93,45 @@
     </div>
 
     <script>
-  function calculateScore() {
-    let grammar = document.getElementById("grammar").value;  // This is either 'meets' or 'autofail'
-    let finalPercentage = 0;
-    
-    // If grammar is "autofail", set the final score to 0 and prevent further calculations
-    if (grammar === "autofail") {
-        document.getElementById("finalScore").innerText = "0";
-        return;  // Stop here for autofail
-    }
-    
-    // If grammar is "meets", proceed with score calculations
-    let scores = document.querySelectorAll(".score");
-    let totalScore = 0;
-    scores.forEach(select => {
-        totalScore += parseInt(select.value);  // Summing up the score values
-    });
+        function calculateScore() {
+            let scores = document.querySelectorAll(".score");
+            let totalScore = 0;
+            
+            scores.forEach(select => {
+                totalScore += parseInt(select.value);  // Summing up the score values
+            });
 
-    // Calculate the final percentage based on content scores
-    finalPercentage = totalScore / scores.length;
-    
-    // Now, adjust the final score to 100 if grammar is "meets", or 0 if grammar is "autofail"
-    if (grammar === "meets") {
-        finalPercentage = 100;  // Set the final score to 100 if grammar is meets
-    }
+            // Calculate the final percentage
+            let finalPercentage = totalScore / scores.length;
+            document.getElementById("finalScore").innerText = finalPercentage.toFixed(2);
 
-    // Display the final score
-    document.getElementById("finalScore").innerText = finalPercentage.toFixed(2);
+            // Prepare the form data to submit
+            let formData = {
+                opening: document.getElementById("opening").value,
+                callToAction: document.getElementById("callToAction").value,
+                personalization: document.getElementById("personalization").value,
+                persona: document.getElementById("persona").value,
+                business: document.getElementById("business").value,
+                features: document.getElementById("features").value,
+                finalScore: finalPercentage.toFixed(2)  // This finalScore is based on the content scores only
+            };
 
-    // Prepare the form data to submit
-    let formData = {
-        grammar: grammar,  // Just storing 'meets' or 'autofail'
-        opening: document.getElementById("opening").value,
-        callToAction: document.getElementById("callToAction").value,
-        personalization: document.getElementById("personalization").value,
-        persona: document.getElementById("persona").value,
-        business: document.getElementById("business").value,
-        features: document.getElementById("features").value,
-        finalScore: finalPercentage.toFixed(2)  // This finalScore is either 100 or based on content scores
-    };
-
-    // Send the form data via POST request, but only if grammar is not "autofail"
-    if (grammar !== "autofail") {
-        fetch('http://127.0.0.1:8000/submit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Data stored successfully:', data);
-        })
-        .catch(error => {
-            console.error('Error storing data:', error);
-        });
-    }
-}
+            // Send the form data via POST request
+            fetch('http://127.0.0.1:8000/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data stored successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error storing data:', error);
+            });
+        }
     </script>
 </body>
 </html>
