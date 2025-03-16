@@ -100,48 +100,55 @@
 
     <script>
         function calculateScore() {
-            let grammar = document.getElementById("grammar").value;
-            if (grammar === "autofail") {
-                document.getElementById("finalScore").innerText = "0";
-                return;
-            }
+    let grammar = document.getElementById("grammar").value;
+    let finalPercentage = 0;
+    
+    // If grammar is "autofail", prevent further calculations and just return.
+    if (grammar === "autofail") {
+        document.getElementById("finalScore").innerText = "0";
+        return;  // Don't send data if it's autofail
+    }
 
-            let scores = document.querySelectorAll(".score");
-            let totalScore = 0;
-            scores.forEach(select => {
-                totalScore += parseInt(select.value);
-            });
-            
-            let finalPercentage = totalScore / scores.length;
-            document.getElementById("finalScore").innerText = finalPercentage.toFixed(2);
+    // If grammar is not autofail, proceed with score calculations
+    let scores = document.querySelectorAll(".score");
+    let totalScore = 0;
+    scores.forEach(select => {
+        totalScore += parseInt(select.value);
+    });
 
-            // Submit the data after calculating the score
-            let formData = {
-            grammar: document.getElementById("grammar").value,  // Ensure this is the value "meets" or "autofail"
-            opening: document.getElementById("opening").value,
-            callToAction: document.getElementById("callToAction").value,
-            personalization: document.getElementById("personalization").value,
-            persona: document.getElementById("persona").value,
-            business: document.getElementById("business").value,
-            features: document.getElementById("features").value,
-            finalScore: finalPercentage.toFixed(2)
-            };
-            console.log(formData);
-            fetch('http://127.0.0.1:8000/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Data stored successfully:', data);
-            })
-            .catch(error => {
-                console.error('Error storing data:', error);
-            });
-        }
+    finalPercentage = totalScore / scores.length;
+    document.getElementById("finalScore").innerText = finalPercentage.toFixed(2);
+
+    // Prepare the form data to send only if it's not autofail
+    let formData = {
+        grammar: grammar,
+        opening: document.getElementById("opening").value,
+        callToAction: document.getElementById("callToAction").value,
+        personalization: document.getElementById("personalization").value,
+        persona: document.getElementById("persona").value,
+        business: document.getElementById("business").value,
+        features: document.getElementById("features").value,
+        finalScore: finalPercentage.toFixed(2)
+    };
+
+    // Send the form data via a POST request, only if grammar is not "autofail"
+    if (grammar !== "autofail") {
+        fetch('http://127.0.0.1:8000/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data stored successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error storing data:', error);
+        });
+    }
+}
     </script>
 </body>
 </html>
