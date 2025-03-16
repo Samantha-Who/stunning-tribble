@@ -109,29 +109,41 @@
         return;  // Don't send data if it's autofail
     }
 
+   function calculateScore() {
+    let grammar = document.getElementById("grammar").value;  // This is either 'meets' or 'autofail'
+    let finalPercentage = 0;
+    
+    // If grammar is "autofail", prevent further calculations and set final score to 0
+    if (grammar === "autofail") {
+        document.getElementById("finalScore").innerText = "0";
+        return;  // Don't proceed with the calculation if "autofail"
+    }
+    
     // If grammar is not autofail, proceed with score calculations
     let scores = document.querySelectorAll(".score");
     let totalScore = 0;
     scores.forEach(select => {
-        totalScore += parseInt(select.value);
+        totalScore += parseInt(select.value);  // Summing up the score values
     });
 
+    // Calculate the final percentage
     finalPercentage = totalScore / scores.length;
     document.getElementById("finalScore").innerText = finalPercentage.toFixed(2);
 
-    // Prepare the form data to send only if it's not autofail
+    // Prepare the form data to submit
     let formData = {
-        grammar: grammar,
+        grammar: grammar,  // Just storing 'meets' or 'autofail'
         opening: document.getElementById("opening").value,
         callToAction: document.getElementById("callToAction").value,
         personalization: document.getElementById("personalization").value,
         persona: document.getElementById("persona").value,
         business: document.getElementById("business").value,
         features: document.getElementById("features").value,
-        finalScore: finalPercentage.toFixed(2)
+        finalScore: finalPercentage.toFixed(2)  // Only this is based on the actual content scores
+            
     };
 
-    // Send the form data via a POST request, only if grammar is not "autofail"
+    // Send the form data via POST request, but only if grammar is not "autofail"
     if (grammar !== "autofail") {
         fetch('http://127.0.0.1:8000/submit', {
             method: 'POST',
