@@ -117,14 +117,14 @@
 
             // Submit the data after calculating the score
             let formData = {
-                grammar: grammar,
-                opening: document.getElementById("opening").value,
-                callToAction: document.getElementById("callToAction").value,
-                personalization: document.getElementById("personalization").value,
-                persona: document.getElementById("persona").value,
-                business: document.getElementById("business").value,
-                features: document.getElementById("features").value,
-                finalScore: finalPercentage.toFixed(2)
+            grammar: document.getElementById("grammar").value,  // Ensure this is the value "meets" or "autofail"
+            opening: document.getElementById("opening").value,
+            callToAction: document.getElementById("callToAction").value,
+            personalization: document.getElementById("personalization").value,
+            persona: document.getElementById("persona").value,
+            business: document.getElementById("business").value,
+            features: document.getElementById("features").value,
+            finalScore: finalPercentage.toFixed(2)
             };
             console.log(formData);
             fetch('http://127.0.0.1:8000/submit', {
