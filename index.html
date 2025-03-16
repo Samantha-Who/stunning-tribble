@@ -105,7 +105,7 @@
                 document.getElementById("finalScore").innerText = "0";
                 return;
             }
-            
+
             let scores = document.querySelectorAll(".score");
             let totalScore = 0;
             scores.forEach(select => {
@@ -114,8 +114,9 @@
             
             let finalPercentage = totalScore / scores.length;
             document.getElementById("finalScore").innerText = finalPercentage.toFixed(2);
-        }
-        let formData = {
+
+            // Submit the data after calculating the score
+            let formData = {
                 grammar: grammar,
                 opening: document.getElementById("opening").value,
                 callToAction: document.getElementById("callToAction").value,
@@ -126,7 +127,7 @@
                 finalScore: finalPercentage.toFixed(2)
             };
 
-            fetch('http://http://127.0.0.1:8000/submit', {
+            fetch('http://127.0.0.1:8000/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -140,7 +141,7 @@
             .catch(error => {
                 console.error('Error storing data:', error);
             });
+        }
     </script>
 </body>
 </html>
-
