@@ -36,9 +36,10 @@ class FormData(BaseModel):
 
 # POST endpoint to submit form data
 @app.post("/submit")
-async def submit_form(form_data: FormData):
-    form_data_storage.append(form_data.dict())
-    return JSONResponse(content={"message": "Form data stored successfully!", "data": form_data.dict()})
+async def submit_data(form_data: FormData):
+    # Just for debugging, print the received data
+    print(form_data)
+    return {"message": "Data submitted successfully", "data": form_data}
 
 # GET endpoint to fetch the submitted grades
 @app.get("/grades")
