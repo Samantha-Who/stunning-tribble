@@ -97,7 +97,10 @@
     let scores = document.querySelectorAll(".score");
     let totalScore = 0;
 
+    // Collect the scores in an array
+    let scoreArray = [];
     scores.forEach(select => {
+        scoreArray.push(parseInt(select.value));  // Convert each score to an integer
         totalScore += parseInt(select.value);  // Summing up the score values
     });
 
@@ -105,14 +108,9 @@
     let finalPercentage = totalScore / scores.length;
     document.getElementById("finalScore").innerText = finalPercentage.toFixed(2);
 
-    // Prepare the form data to submit (ensure numeric values are used)
+    // Prepare the form data to submit (send the scoreArray instead of individual fields)
     let formData = {
-        opening: parseInt(document.getElementById("opening").value),  // Convert to integer
-        callToAction: parseInt(document.getElementById("callToAction").value),  // Convert to integer
-        personalization: parseInt(document.getElementById("personalization").value),  // Convert to integer
-        persona: parseInt(document.getElementById("persona").value),  // Convert to integer
-        business: parseInt(document.getElementById("business").value),  // Convert to integer
-        features: parseInt(document.getElementById("features").value),  // Convert to integer
+        scores: scoreArray,  // Send the array of scores
         finalScore: parseFloat(finalPercentage.toFixed(2))  // Ensure the final score is a float
     };
 
