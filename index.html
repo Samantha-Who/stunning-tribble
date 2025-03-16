@@ -126,7 +126,7 @@
                 features: document.getElementById("features").value,
                 finalScore: finalPercentage.toFixed(2)
             };
-
+            console.log(formData);
             fetch('http://127.0.0.1:8000/submit', {
                 method: 'POST',
                 headers: {
