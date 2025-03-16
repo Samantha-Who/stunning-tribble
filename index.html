@@ -99,25 +99,32 @@
     </div>
 
     <script>
-   function calculateScore() {
+  function calculateScore() {
     let grammar = document.getElementById("grammar").value;  // This is either 'meets' or 'autofail'
     let finalPercentage = 0;
     
-    // If grammar is "autofail", prevent further calculations and set final score to 0
+    // If grammar is "autofail", set the final score to 0 and prevent further calculations
     if (grammar === "autofail") {
         document.getElementById("finalScore").innerText = "0";
-        return;  // Don't proceed with the calculation if "autofail"
+        return;  // Stop here for autofail
     }
     
-    // If grammar is not autofail, proceed with score calculations
+    // If grammar is "meets", proceed with score calculations
     let scores = document.querySelectorAll(".score");
     let totalScore = 0;
     scores.forEach(select => {
         totalScore += parseInt(select.value);  // Summing up the score values
     });
 
-    // Calculate the final percentage
+    // Calculate the final percentage based on content scores
     finalPercentage = totalScore / scores.length;
+    
+    // Now, adjust the final score to 100 if grammar is "meets", or 0 if grammar is "autofail"
+    if (grammar === "meets") {
+        finalPercentage = 100;  // Set the final score to 100 if grammar is meets
+    }
+
+    // Display the final score
     document.getElementById("finalScore").innerText = finalPercentage.toFixed(2);
 
     // Prepare the form data to submit
@@ -129,8 +136,7 @@
         persona: document.getElementById("persona").value,
         business: document.getElementById("business").value,
         features: document.getElementById("features").value,
-        finalScore: finalPercentage.toFixed(2)  // Only this is based on the actual content scores
-            
+        finalScore: finalPercentage.toFixed(2)  // This finalScore is either 100 or based on content scores
     };
 
     // Send the form data via POST request, but only if grammar is not "autofail"
