@@ -99,16 +99,6 @@
     </div>
 
     <script>
-        function calculateScore() {
-    let grammar = document.getElementById("grammar").value;
-    let finalPercentage = 0;
-    
-    // If grammar is "autofail", prevent further calculations and just return.
-    if (grammar === "autofail") {
-        document.getElementById("finalScore").innerText = "0";
-        return;  // Don't send data if it's autofail
-    }
-
    function calculateScore() {
     let grammar = document.getElementById("grammar").value;  // This is either 'meets' or 'autofail'
     let finalPercentage = 0;
