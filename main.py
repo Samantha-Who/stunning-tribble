@@ -7,7 +7,7 @@ app = FastAPI()
 
 # Enable CORS for the GitHub Pages domain (or any domain you want to allow)
 origins = [
-    "https://samantha-who.github.io",  # Replace this with your exact domain
+    "https://samantha-who.github.io/stunning_tribble",  # Replace this with your exact domain
     "http://localhost",  # Allow requests from localhost for testing
     "http://127.0.0.1",  # Allow requests from localhost (IP address)
 ]
