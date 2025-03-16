@@ -1,9 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-from enum import Enum
 
 app = FastAPI()
 
@@ -25,12 +22,8 @@ app.add_middleware(
 # In-memory storage for form data
 form_data_storage = []
 
-class GrammarEnum(str, Enum):
-    meets = "meets"
-    autofail = "autofail"
-
+# Updated FormData model without the 'grammar' field
 class FormData(BaseModel):
-    grammar: GrammarEnum  # This will enforce the 'grammar' field to be one of the Enum values
     opening: int
     callToAction: int
     personalization: int
@@ -42,8 +35,8 @@ class FormData(BaseModel):
 # POST endpoint to submit form data
 @app.post("/submit")
 async def submit_data(form_data: FormData):
-    # Just for debugging, print the received data
-    print(form_data)
+    form_data_storage.append(form_data)  # Store the submitted form data
+    print(form_data)  # For debugging, print the received data
     return {"message": "Data submitted successfully", "data": form_data}
 
 # GET endpoint to fetch the submitted grades
