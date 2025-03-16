@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weighted Quality Rubric</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap');
+
+        body {
+            background-color: #FADADD; /* light pink color */
+            font-family: 'Comic Neue', cursive;
+        }
+        .rubric-container {
+            background-color: #E6E6FA; /* lavender color */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            text-align: left;
+        }
+        select {
+            font-family: 'Comic Neue', cursive;
+            border-radius: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="rubric-container">
+        <h2>Weighted Quality Rubric</h2>
+        
+        <label for="grammar">Grammar:</label>
+        <select id="grammar">
+            <option value="meets">Meets</option>
+            <option value="autofail">Autofail</option>
+        </select>
+        
+        <h3>Content Quality</h3>
+        <div class="grid-container">
+            <div class="grid-item">
+                <label for="opening">Opening:</label>
+                <select class="score" id="opening">
+                    <option value="100">Good</option>
+                    <option value="67">Average</option>
+                    <option value="33">Needs Improvement</option>
+                </select>
+            </div>
+            <div class="grid-item">
+                <label for="callToAction">Call to Action:</label>
+                <select class="score" id="callToAction">
+                    <option value="100">Good</option>
+                    <option value="67">Average</option>
+                    <option value="33">Needs Improvement</option>
+                </select>
+            </div>
+            <div class="grid-item">
+                <label for="personalization">Personalization:</label>
+                <select class="score" id="personalization">
+                    <option value="100">Good</option>
+                    <option value="67">Average</option>
+                    <option value="33">Needs Improvement</option>
+                </select>
+            </div>
+        </div>
+        
+        <h3>Relevance</h3>
+        <div class="grid-container">
+            <div class="grid-item">
+                <label for="persona">Personalized to Persona:</label>
+                <select class="score" id="persona">
+                    <option value="100">Good</option>
+                    <option value="67">Average</option>
+                    <option value="33">Needs Improvement</option>
+                </select>
+            </div>
+            <div class="grid-item">
+                <label for="business">Personalized to Business:</label>
+                <select class="score" id="business">
+                    <option value="100">Good</option>
+                    <option value="67">Average</option>
+                    <option value="33">Needs Improvement</option>
+                </select>
+            </div>
+            <div class="grid-item">
+                <label for="features">Product Features are Relevant:</label>
+                <select class="score" id="features">
+                    <option value="100">Good</option>
+                    <option value="67">Average</option>
+                    <option value="33">Needs Improvement</option>
+                </select>
+            </div>
+        </div>
+        
+        <button onclick="calculateScore()">Calculate Score</button>
+        <h3>Final Score: <span id="finalScore">N/A</span>%</h3>
+    </div>
+
+    <script>
+        function calculateScore() {
+            let grammar = document.getElementById("grammar").value;
+            if (grammar === "autofail") {
+                document.getElementById("finalScore").innerText = "0";
+                return;
+            }
+            
+            let scores = document.querySelectorAll(".score");
+            let totalScore = 0;
+            scores.forEach(select => {
+                totalScore += parseInt(select.value);
+            });
+            
+            let finalPercentage = totalScore / scores.length;
+            document.getElementById("finalScore").innerText = finalPercentage.toFixed(2);
+        }
+        let formData = {
+                grammar: grammar,
+                opening: document.getElementById("opening").value,
+                callToAction: document.getElementById("callToAction").value,
+                personalization: document.getElementById("personalization").value,
+                persona: document.getElementById("persona").value,
+                business: document.getElementById("business").value,
+                features: document.getElementById("features").value,
+                finalScore: finalPercentage.toFixed(2)
+            };
+
+            fetch('http://your-backend-url.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data stored successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error storing data:', error);
+            });
+    </script>
+</body>
+</html>
+
